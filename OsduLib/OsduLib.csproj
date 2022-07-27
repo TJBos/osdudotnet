@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net6.0;netcoreapp3.1</TargetFrameworks>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Amazon.Extensions.CognitoAuthentication" Version="2.2.2" />
+        <PackageReference Include="AWSSDK.S3" Version="3.7.8.6" />
+        <PackageReference Include="AWSSDK.SecretsManager" Version="3.7.2.15" />
+        <PackageReference Include="AWSSDK.SimpleSystemsManagement" Version="3.7.12.21" />
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.2-mauipre.1.22102.15" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.2-mauipre.1.22102.15" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.16" />
+        <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
+        <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Files\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Files\OSDU - Well A01, Routine Core Analysis, Routine SWC Analysis.csv">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Files\OSDU - Well A02, Routine Core Analysis, Routine SWC Analysis.csv">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Files\OSDU METADATA - Well A01, Routine Core Analysis, Routine SWC Analysis.csv">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Files\OSDU METADATA - Well A02, Routine Core Analysis, Routine SWC Analysis.csv">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+    <!--   <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="3.1.1" />
+        <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.7" />
+      </ItemGroup> -->
+
+
+</Project>
