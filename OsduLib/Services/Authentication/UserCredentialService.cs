@@ -1,5 +1,6 @@
 using Amazon.CognitoIdentityProvider;
 using Amazon.Extensions.CognitoAuthentication;
+using Amazon.Runtime;
 using OsduLib.Models;
 
 namespace OsduLib.Services.Authentication;
@@ -12,11 +13,12 @@ public class UserCredentialService
 
     public UserCredentialService(
         OsduAWSEnvironment osduEnv
-        , IAmazonCognitoIdentityProvider cognitoIdentityProviderClient
     )
     {
         _clientSecret = osduEnv.UserPoolClientSecret;
-        _cognitoIdentityProviderClient = cognitoIdentityProviderClient;
+        _cognitoIdentityProviderClient = new AmazonCognitoIdentityProviderClient(
+                new AnonymousAWSCredentials(),
+                osduEnv.RegionEndpoint);
         // delays resolution of user pool ids from environment data
         _cognitoUserPoolResolver = () => new CognitoUserPool(
             osduEnv.UserPoolId,
@@ -59,11 +61,13 @@ public class UserCredentialService
 
         public Task<TokenResponse> GetToken()
         {
+    
             return Task.FromResult(new TokenResponse
             {
                 AccessToken = AuthResponse.AuthenticationResult.AccessToken,
                 ExpiresIn = AuthResponse.AuthenticationResult.ExpiresIn,
                 TokenType = AuthResponse.AuthenticationResult.TokenType,
+                RefreshToken = AuthResponse.AuthenticationResult.RefreshToken,
                 Username = _cognitoUser.Username
             });
         }

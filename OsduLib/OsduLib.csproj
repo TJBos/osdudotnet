@@ -19,25 +19,6 @@
         <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Files\" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Update="Files\OSDU - Well A01, Routine Core Analysis, Routine SWC Analysis.csv">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Files\OSDU - Well A02, Routine Core Analysis, Routine SWC Analysis.csv">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Files\OSDU METADATA - Well A01, Routine Core Analysis, Routine SWC Analysis.csv">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Files\OSDU METADATA - Well A02, Routine Core Analysis, Routine SWC Analysis.csv">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
-
     <!--   <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="3.1.1" />
         <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.7" />

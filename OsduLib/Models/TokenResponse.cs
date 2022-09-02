@@ -10,5 +10,7 @@ public class TokenResponse
 
     [JsonProperty("token_type")] public string TokenType = string.Empty;
 
+    [JsonProperty("refresh_token")] public string RefreshToken = string.Empty;
+
     public string? Username { get; set; }
 }

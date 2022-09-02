@@ -3,30 +3,33 @@ using OsduLib.Services.Authentication;
 
 namespace OsduLib.Client
 {
-    // This client can take in either a local CLI profile with right permissions.
-    // Or the cognito service principal client_id and client_secret directly, also pass in the authtokenurl and the scope.
     public class AwsServicePrincipalOsduClient : BaseOsduClient
     {
-        public string ResourcePrefix;
-        private ServicePrincipal servicePrincipal;
+        private readonly ServicePrincipal servicePrincipal;
 
-        public AwsServicePrincipalOsduClient(string dataPartitionId, string apiBaseUrl, string resourcePrefix, string profile, string region) : base(dataPartitionId, apiBaseUrl)
+        public AwsServicePrincipalOsduClient(OsduAWSEnvironment osduAWSEnvironment) : base(osduAWSEnvironment.DataPartitionId, osduAWSEnvironment.BaseApiUrl)
         {
-            ResourcePrefix = resourcePrefix;
-            servicePrincipal = new ServicePrincipal(resourcePrefix, region, profile);
-            Task.Run(async () => await SetToken()).Wait();
-        }
 
-        public AwsServicePrincipalOsduClient(string dataPartitionId, string apiBaseUrl, string clientId, string clientSecret, string authTokenUrl, string awsOAuthScope ) : base(dataPartitionId, apiBaseUrl)
-        {
-            servicePrincipal = new ServicePrincipal(clientId, clientSecret, authTokenUrl, awsOAuthScope);
+            if (osduAWSEnvironment.ServicePrincipalClientId != null && osduAWSEnvironment.ServicePrincipalClientSecret != null && osduAWSEnvironment.TokenUrl != null)
+            {
+                servicePrincipal = new ServicePrincipal(osduAWSEnvironment.ServicePrincipalClientId, osduAWSEnvironment.ServicePrincipalClientSecret, osduAWSEnvironment.TokenUrl, osduAWSEnvironment.CustomScope);
+            }
+            else if (osduAWSEnvironment.Profile != null && osduAWSEnvironment.Region != null && osduAWSEnvironment.ResourcePrefix != null)
+            {
+                servicePrincipal = new ServicePrincipal(osduAWSEnvironment.ResourcePrefix, osduAWSEnvironment.Region, osduAWSEnvironment.Profile);
+            }
+            else
+            {
+                throw new ArgumentException("You must provide either a Profile, Region and ResourcePrefix or a ServicePrincipalClientId, ServicePrincipalClientSecret and TokenUrl to create a ServicePrincipalClient.");
+            }
             Task.Run(async () => await SetToken()).Wait();
         }
         private async Task SetToken()
         {
             TokenResponse response = await servicePrincipal.GetToken();
             AccessToken = response.AccessToken;
-            TokenExpiration = response.ExpiresIn;
+            RefreshToken = response.RefreshToken;
+            TokenExpiration = DateTime.Now.AddSeconds(response.ExpiresIn);
         }
     }
 }

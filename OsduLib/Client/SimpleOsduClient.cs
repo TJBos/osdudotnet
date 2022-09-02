@@ -21,7 +21,6 @@ re-instantiating the client with the new token or by providing the authenticatio
 and allowing the client to attempt the refresh automatically. 
 
      */
-    private string? RefreshToken;
     private string? RefreshUrl;
     private string? ClientID;
     private string? ClientSecret;
@@ -53,6 +52,7 @@ and allowing the client to attempt the refresh automatically.
             {"scope", "openid email"}
         };
 
+
         var request = new HttpRequestMessage(HttpMethod.Post, RefreshUrl);
         request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
         request.Content = new StringContent(JsonConvert.SerializeObject(data));
@@ -61,6 +61,6 @@ and allowing the client to attempt the refresh automatically.
         var content = await response.Content.ReadAsStringAsync();
         TokenResponse tokenResponse = JsonConvert.DeserializeObject<TokenResponse>(content);
         AccessToken = tokenResponse.AccessToken;
+        TokenExpiration = DateTime.Now.AddSeconds(tokenResponse.ExpiresIn);
     }
-
 }

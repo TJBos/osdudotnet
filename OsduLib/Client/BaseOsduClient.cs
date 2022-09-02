@@ -11,12 +11,15 @@ namespace OsduLib.Client
     {
         private string _accessToken;
 
-        public int TokenExpiration;
-
+        public DateTime TokenExpiration;
+        public string RefreshToken;
         public string AccessToken
         {
             get 
             {   // implement checking validity of token and refresh if necessary!
+                if (DateTime.Compare(TokenExpiration, DateTime.Now) < 0 && RefreshToken != null) {
+                    // update token with refresh token? Need also refresh url...
+                }
                 return _accessToken; 
             }
             set { _accessToken = value; }
@@ -27,6 +30,7 @@ namespace OsduLib.Client
         public SearchService Search => new SearchService(this);
         public DatasetService Dataset => new DatasetService(this);
         public SchemaService Schema => new SchemaService(this);
+        public StorageService Storage => new StorageService(this);
 
         public BaseOsduClient(string dataPartitionId, string? apiBaseUrl=null)
         {
@@ -45,6 +49,14 @@ namespace OsduLib.Client
         internal Task<TResponse> GetJson<TResponse>(string path, HttpHeaders headers, string body)
         {
             return SendJson<TResponse>(HttpMethod.Get, path, headers, body);
+        }
+
+        internal async Task<HttpResponseMessage> Delete(string path, HttpHeaders headers, string body)
+        {
+            var requestUrl = ApiBaseUrl + "/" + path;
+            var request = MakeRequest(requestUrl, headers);
+            request.Method = HttpMethod.Delete;
+            return await SendAsync(request);
         }
 
         internal async Task<TResponse> SendJson<TResponse>(HttpMethod method, string path, HttpHeaders headers, string body)
@@ -80,17 +92,7 @@ namespace OsduLib.Client
 
         private async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request)
         {
-            // When token has not been set, but there is a token provider, use an available token
-            //if (_baseClient.DefaultRequestHeaders.Authorization == null && _tokenProvider != null)
-            //{
-            //    var tokenResponse = await _tokenProvider.GetToken();
-            //    if (string.IsNullOrEmpty(tokenResponse.TokenType) || string.IsNullOrEmpty(tokenResponse.AccessToken))
-            //        throw new InvalidTokenException(tokenResponse.GetType(),
-            //            "Both a token type and access token must be provided.");
-            //    SetToken(tokenResponse);
-            //}
-
-            return await base.SendAsync(request);
+          return await base.SendAsync(request);
         }
     }
 }

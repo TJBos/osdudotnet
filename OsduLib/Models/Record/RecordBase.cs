@@ -4,7 +4,7 @@
 
 namespace OsduLib.Models.Record
 {
-    public class RecordBase
+    public abstract class RecordBase
 
     {
         [JsonProperty("acl")] public Acl Acl => new Acl();
@@ -14,7 +14,6 @@ namespace OsduLib.Models.Record
         [JsonProperty("kind")] public string? Kind;
 
         [JsonProperty("id")] public string? Id;
-
 
     }
 }
