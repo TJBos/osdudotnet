@@ -1,5 +1,8 @@
-﻿using OsduLib.Models;
+﻿using Newtonsoft.Json;
+using OsduLib.Models;
+using OsduLib.Services;
 using OsduLib.Services.Authentication;
+using System.Net.Http.Headers;
 
 namespace OsduLib.Client
 {
@@ -28,8 +31,13 @@ namespace OsduLib.Client
         {
             TokenResponse response = await servicePrincipal.GetToken();
             AccessToken = response.AccessToken;
-            RefreshToken = response.RefreshToken;
             TokenExpiration = DateTime.Now.AddSeconds(response.ExpiresIn);
         }
+
+        protected override async Task UpdateToken()
+        {
+            await SetToken();
+        }
+
     }
 }

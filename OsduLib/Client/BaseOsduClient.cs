@@ -12,15 +12,15 @@ namespace OsduLib.Client
         private string _accessToken;
 
         public DateTime TokenExpiration;
-        public string RefreshToken;
         public string AccessToken
         {
-            get 
-            {   // implement checking validity of token and refresh if necessary!
-                if (DateTime.Compare(TokenExpiration, DateTime.Now) < 0 && RefreshToken != null) {
-                    // update token with refresh token? Need also refresh url...
+            get
+            {
+                if (DateTime.Compare(TokenExpiration, DateTime.Now) < 0)
+                {
+                    Task.Run(async () => await UpdateToken()).Wait();
                 }
-                return _accessToken; 
+                return _accessToken;
             }
             set { _accessToken = value; }
         }
@@ -32,10 +32,16 @@ namespace OsduLib.Client
         public SchemaService Schema => new SchemaService(this);
         public StorageService Storage => new StorageService(this);
 
-        public BaseOsduClient(string dataPartitionId, string? apiBaseUrl=null)
+        public IngestionService ManifestIngestion => new IngestionService(this);
+
+        public BaseOsduClient(string dataPartitionId, string? apiBaseUrl = null)
         {
             DataPartitionId = dataPartitionId;
             ApiBaseUrl = apiBaseUrl ?? Environment.GetEnvironmentVariable("OSDU_API_URL");
+        }
+        protected virtual async Task UpdateToken()
+        {
+            // implemented by parent classes.
         }
 
         internal Task<TResponse> PutJson<TResponse>(string path, HttpHeaders headers, string body)
@@ -92,7 +98,7 @@ namespace OsduLib.Client
 
         private async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request)
         {
-          return await base.SendAsync(request);
+            return await base.SendAsync(request);
         }
     }
 }

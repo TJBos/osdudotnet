@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace OsduLib.Models.Dataset;
 
-public class RegisterManifestFileResponse
+public class RegisterDatasetFileResponse
 {
     [JsonProperty("datasetRegistries")] public List<DatasetRegistry> DatasetRegistries;
 }

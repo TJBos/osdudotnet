@@ -5,5 +5,5 @@ namespace OsduLib.Models.Dataset;
 public class GetRetrievalInstructionsRequest
 {
     [JsonProperty("datasetRegistryIds")]
-    public ICollection<string> DatasetRegistryIds;
+    public IEnumerable<string> DatasetRegistryIds;
 }
