@@ -5,6 +5,9 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>latest</LangVersion>
+        <Authors>Toon Bosmans</Authors>
+        <Company>Pariveda Solutions</Company>
+        <Description>A simple client for the OSDU data platform</Description>
     </PropertyGroup>
 
     <ItemGroup>

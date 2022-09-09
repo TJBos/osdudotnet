@@ -33,3 +33,4 @@ msbuild.wrn
 
 osdudotnet/
 Program.cs
+*.tests.json
