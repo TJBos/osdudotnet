@@ -9,6 +9,7 @@ A simple client for the [OSDU](https://community.opengroup.org/osdu) data platfo
   - [AwsServicePrincipalOsduClient](#awsserviceprincipalosduclient)
   - [AwsOsduClient](#awsosduclient)
 - [Currently supported methods](#currently-supported-methods)
+- [Installation](#installation)
 - [Tests](#tests)
 - [Usage](#usage)
   - [Instantiating the SimpleOsduClient](#instantiating-the-simpleosduclient)
@@ -78,6 +79,10 @@ If the Cognito Token Url is provided, automatic refresh is taken care of.
   - CheckIngestionRunStatus
 - [schema]
   - Kinds
+
+## Installation
+
+Add the included OsduLib.1.x.x.nupkg package file to your Nuget feed. Or add the OsduLib project to your solution.
 
 ## Tests
 
@@ -168,8 +173,22 @@ Below are just a few usage examples. See all the implemented method signatures i
 
 #### Search for records by query
 
-```csharp
+Executes a query against the OSDU search service.
+Takes a type of SearchRequest as a parameter,  with at least a kind property, and optionally a query and other fields. 
+Must adhere to the Lucene syntax suported by OSDU. For more details, see:
+https://community.opengroup.org/osdu/documentation/-/wikis/Releases/R2.0/OSDU-Query-Syntax
+Returns 3 items; aggregations, list of search results and totalCount
 
+```csharp
+using OsduLib.Models.Search;
+
+var query = new SearchRequest
+{
+    Kind = "osdu:wks:dataset--File.Generic:1.0.0",
+    Query = "data.Name:\"test\"" 
+};
+
+var result = await client.Search.Query(query);
 ```
 
 #### Get a record
@@ -181,5 +200,22 @@ var result = await client.Storage.GetRecord(recordId);
 ```
 
 #### Create/update records
+
+```csharp
+using OsduLib.Models;
+using OsduLib.Models.Record;
+
+var record = new RecordData 
+{
+    Kind = "osdu:wks:dataset--File.Generic:1.0.0",
+    Acl = new Acl(),
+    Legal = new Legal(),
+    Data = new GenericData() { { "Name", "Test" } }
+};
+
+var result = await client.Storage.StoreRecords(new List<IRecord> { record }); // records to be stored need to implement IRecord, the RecordData class does.
+
+```
+
 
 TODO: create more documentation for services...

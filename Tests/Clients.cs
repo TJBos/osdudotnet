@@ -9,19 +9,7 @@ namespace Tests
         public Clients()
         {
             OsduConfiguration config = TestHelpers.GetApplicationConfiguration();
-            AwsEnv = new OsduAWSEnvironment
-            {
-                BaseApiUrl = config.ApiUrl,
-                DataPartitionId = config.DataPartitionId,
-                Region = config.Region,
-                ServicePrincipalClientId = config.SvpClientId,
-                ServicePrincipalClientSecret = config.SvpClientSecret,
-                TokenUrl = config.TokenUrl,
-                UserPoolClientId = config.CognitoClientId,
-                UserPoolClientSecret = config.CognitoClientSecret,
-                UserPoolId = config.PoolId,
-                Profile = config.Profile
-            };
+            AwsEnv = TestHelpers.ConfigureAwsEnv();
             AWSCredentials = config.AWSCredentials;
         }
         [TestMethod]

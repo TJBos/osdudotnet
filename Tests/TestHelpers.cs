@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.Json;
+
 
 namespace Tests
 {
@@ -16,6 +16,23 @@ namespace Tests
             iConfig.Bind(configuration);
 
             return configuration;
+        }
+        public static OsduAWSEnvironment ConfigureAwsEnv()
+        {
+            var config = GetApplicationConfiguration();
+            return new OsduAWSEnvironment
+            {
+                BaseApiUrl = config.ApiUrl,
+                DataPartitionId = config.DataPartitionId,
+                Region = config.Region,
+                ServicePrincipalClientId = config.SvpClientId,
+                ServicePrincipalClientSecret = config.SvpClientSecret,
+                TokenUrl = config.TokenUrl,
+                UserPoolClientId = config.CognitoClientId,
+                UserPoolClientSecret = config.CognitoClientSecret,
+                UserPoolId = config.PoolId,
+                Profile = config.Profile
+            };
         }
     }
 
@@ -38,5 +55,16 @@ namespace Tests
     {
         public string Username { get; set; }
         public string Password { get; set; }
+    }
+
+    public class OsduRecord : RecordData
+    {
+        public OsduRecord()
+        {
+            Kind = "osdu:wks:dataset--File.Generic:1.0.0";
+            Acl = new Acl();
+            Legal = new Legal();
+            Data = new GenericData() { { "Name", "Test" } };
+        }
     }
 }
